@@ -2,17 +2,19 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Models\Syllabus;
-use Barryvdh\DomPDF\Facade\Pdf; // Importante para que funcione el PDF
+use Barryvdh\DomPDF\Facade\Pdf;
+use App\Http\Controllers\Auth\LoginController;
 
-Route::get('/', function () {
-    return view('welcome');
-});
+// Redirige la raíz al login
+Route::get('/', fn() => redirect('/login'));
 
-// RUTA PARA LA IMPRESIÓN DEL MICROCURRÍCULO (MODIFICADA PARA PDF)
+// Login único para todos los roles
+Route::get('/login', [LoginController::class, 'showLogin'])->name('login');
+Route::post('/login', [LoginController::class, 'login']);
+Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
+
+// Ruta para impresión del microcurrículo en PDF
 Route::get('/syllabus/{record}/print', function (Syllabus $record) {
-    // Cargamos la vista que creaste en resources/views/pdf/syllabus.blade.php
     $pdf = Pdf::loadView('pdf.syllabus', compact('record'));
-    
-    // Retornamos el PDF para que se abra en el navegador
     return $pdf->stream('Syllabus-'.$record->codigo.'.pdf');
 })->name('syllabus.print')->middleware(['auth']);

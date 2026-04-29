@@ -17,41 +17,37 @@ use Illuminate\Foundation\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
+use App\Filament\Docente\Pages\Login as DocenteLogin;
 
-class AdminPanelProvider extends PanelProvider
+class DocentePanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
-            ->login()
-            ->brandName('Syllabus FUP — Admin')
+            ->id('docente')
+            ->path('docente')
+            ->login(DocenteLogin::class)
+            ->brandName('Syllabus FUP — Docente')
             ->brandLogo(asset('images/logo_fup.jpg'))
             ->brandLogoHeight('3rem')
             ->colors([
-                'primary' => Color::hex('#BA1B1B'),
+                'primary' => Color::hex('#1B4BA1'),
             ])
             ->font('Poppins')
             ->discoverResources(
-                in: app_path('Filament/Resources'),
-                for: 'App\\Filament\\Resources'
+                in: app_path('Filament/Docente/Resources'),
+                for: 'App\\Filament\\Docente\\Resources'
             )
             ->discoverPages(
-                in: app_path('Filament/Pages'),
-                for: 'App\\Filament\\Pages'
+                in: app_path('Filament/Docente/Pages'),
+                for: 'App\\Filament\\Docente\\Pages'
             )
             ->pages([Pages\Dashboard::class])
             ->discoverWidgets(
-                in: app_path('Filament/Widgets'),
-                for: 'App\\Filament\\Widgets'
+                in: app_path('Filament/Docente/Widgets'),
+                for: 'App\\Filament\\Docente\\Widgets'
             )
-            ->widgets([
-                \App\Filament\Widgets\StatsOverview::class,
-                \App\Filament\Widgets\SyllabusChart::class,
-                Widgets\AccountWidget::class,
-            ])
+            ->widgets([Widgets\AccountWidget::class])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -65,6 +61,7 @@ class AdminPanelProvider extends PanelProvider
             ])
             ->authMiddleware([
                 Authenticate::class,
-            ]);
+            ])
+            ->authGuard('web');
     }
 }

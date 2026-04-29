@@ -18,40 +18,35 @@ use Illuminate\Routing\Middleware\SubstituteBindings;
 use Illuminate\Session\Middleware\StartSession;
 use Illuminate\View\Middleware\ShareErrorsFromSession;
 
-class AdminPanelProvider extends PanelProvider
+class DirectorPanelProvider extends PanelProvider
 {
     public function panel(Panel $panel): Panel
     {
         return $panel
-            ->default()
-            ->id('admin')
-            ->path('admin')
+            ->id('director')
+            ->path('director')
             ->login()
-            ->brandName('Syllabus FUP — Admin')
+            ->brandName('Syllabus FUP — Director')
             ->brandLogo(asset('images/logo_fup.jpg'))
             ->brandLogoHeight('3rem')
             ->colors([
-                'primary' => Color::hex('#BA1B1B'),
+                'primary' => Color::hex('#1B7A3E'),
             ])
             ->font('Poppins')
             ->discoverResources(
-                in: app_path('Filament/Resources'),
-                for: 'App\\Filament\\Resources'
+                in: app_path('Filament/Director/Resources'),
+                for: 'App\\Filament\\Director\\Resources'
             )
             ->discoverPages(
-                in: app_path('Filament/Pages'),
-                for: 'App\\Filament\\Pages'
+                in: app_path('Filament/Director/Pages'),
+                for: 'App\\Filament\\Director\\Pages'
             )
             ->pages([Pages\Dashboard::class])
             ->discoverWidgets(
-                in: app_path('Filament/Widgets'),
-                for: 'App\\Filament\\Widgets'
+                in: app_path('Filament/Director/Widgets'),
+                for: 'App\\Filament\\Director\\Widgets'
             )
-            ->widgets([
-                \App\Filament\Widgets\StatsOverview::class,
-                \App\Filament\Widgets\SyllabusChart::class,
-                Widgets\AccountWidget::class,
-            ])
+            ->widgets([Widgets\AccountWidget::class])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
